@@ -25,13 +25,15 @@ RUN apt-get update && \
     rm -rf /tmp/v8 && \
     rm -rf /tmp/depot_tools && \
     for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done && \
-    apt-get remove --purge \
+    apt-get -y remove --purge \
     build-essential \
     curl \
     git \
     libglib2.0-dev \
     patchelf \
     python && \
+    apt-get -y autoremove && \
+    apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
 RUN apt-get update && \
     apt-get install -y \
@@ -46,7 +48,9 @@ RUN apt-get update && \
     make test && \
     make install && \
     docker-php-ext-enable v8js && \
-    apt-get remove --purge \
+    apt-get -y remove --purge \
     build-essential \
-    git
-
+    git && \
+    apt-get -y autoremove && \
+    apt-get -y clean && \
+    rm -rf /var/lib/apt/lists/*
